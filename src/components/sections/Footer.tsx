@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Mail, MapPin } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/SocialIcons";
 import Link from "next/link";
+import Image from "next/image";
 
 const footerLinks = {
   Programs: [
@@ -42,8 +43,14 @@ export default function Footer() {
             className="md:col-span-2"
           >
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center">
-                <span className="text-[var(--accent)] font-[var(--font-space-grotesk)] font-bold text-xl">E</span>
+              <div className="w-10 h-10 flex items-center justify-center">
+                <Image
+                  src="/logo.png"
+                  alt="E-Cell RBU logo"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="text-xl font-[var(--font-space-grotesk)] font-bold text-[var(--text-primary)]">
                 E-Cell RBU
@@ -106,10 +113,10 @@ export default function Footer() {
               href="https://www.instagram.com/ecell_rbu/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--accent)] hover:border-[var(--border-accent)] hover:bg-[var(--bg-card-hover)] transition-all duration-200"
+              className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border)] flex items-center justify-center hover:border-[var(--border-accent)] hover:bg-[var(--bg-card-hover)] transition-all duration-200"
               aria-label="Instagram"
             >
-              <InstagramIcon size={20} />
+              <InstagramIcon size={28} />
             </a>
           </motion.div>
         </div>

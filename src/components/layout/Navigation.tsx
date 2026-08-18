@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/SocialIcons";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 
 const navLinks = [
@@ -48,9 +49,16 @@ export default function Navigation() {
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-9 h-9 rounded-[var(--radius-md)] bg-[var(--accent-soft)] flex items-center justify-center"
+            className="w-9 h-9 flex items-center justify-center"
           >
-            <span className="text-[var(--accent)] font-[var(--font-space-grotesk)] font-bold text-lg">E</span>
+            <Image
+              src="/logo.png"
+              alt="E-Cell RBU logo"
+              width={36}
+              height={36}
+              priority
+              className="w-full h-full object-contain"
+            />
           </motion.div>
           <span className="text-lg font-[var(--font-space-grotesk)] font-bold text-[var(--text-primary)] hidden sm:block">
             E-Cell RBU
@@ -83,10 +91,10 @@ export default function Navigation() {
             initial={reduce ? false : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--accent)] hover:border-[var(--border-accent)] hover:bg-[var(--bg-card-hover)] transition-all duration-200"
+            className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] border border-[var(--border)] flex items-center justify-center hover:border-[var(--border-accent)] hover:bg-[var(--bg-card-hover)] transition-all duration-200"
             aria-label="Instagram"
           >
-            <InstagramIcon size={18} />
+            <InstagramIcon size={28} />
           </motion.a>
         </div>
 

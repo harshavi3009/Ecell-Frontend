@@ -1,9 +1,50 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+
+interface StatData {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+}
+
+function StatNumber({ value, prefix = "", suffix = "" }: Omit<StatData, "label">) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const reduce = useReducedMotion();
+  const [display, setDisplay] = useState(reduce ? value : 0);
+
+  useEffect(() => {
+    if (!isInView || reduce) return;
+    let start: number | null = null;
+    const duration = 1400;
+
+    const step = (timestamp: number) => {
+      if (start === null) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(eased * value));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+
+    const frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView, reduce, value]);
+
+  return (
+    <span ref={ref}>
+      {prefix}
+      {display}
+      {suffix}
+    </span>
+  );
+}
 
 export default function Hero() {
   const reduce = useReducedMotion();
@@ -76,23 +117,26 @@ export default function Hero() {
               initial={reduce ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-16 flex flex-wrap gap-4 sm:gap-6"
+              className="mt-16 grid grid-cols-3 gap-3 sm:gap-6"
             >
               {[
-                { value: "500+", label: "Founders Empowered" },
-                { value: "50+", label: "Startups Incubated" },
-                { value: "₹2Cr+", label: "Funding Raised" },
-                { value: "20+", label: "Mentors & Partners" },
-              ].map((stat, i) => (
+                { value: 85, suffix: "+", label: "Startups Incubated", color: "#00d4ff", soft: "rgba(0, 212, 255, 0.10)" },
+                { value: 3, prefix: "₹", suffix: "Cr+", label: "Funding Raised", color: "#34d399", soft: "rgba(52, 211, 153, 0.10)" },
+                { value: 20, suffix: "+", label: "Mentors & Partners", color: "#a78bfa", soft: "rgba(167, 139, 250, 0.10)" },
+              ].map((stat) => (
                 <motion.div
                   key={stat.label}
                   whileHover={{ y: -4 }}
-                  className="flex flex-col items-center sm:items-start p-4 sm:px-5 sm:py-3 bg-[var(--bg-surface)] border border-[var(--border)] rounded-[var(--radius-lg)] hover:border-[var(--border-accent)] transition-colors min-w-[140px]"
+                  className="flex flex-col items-center sm:items-start p-3 sm:px-5 sm:py-3 rounded-[var(--radius-lg)] transition-colors min-w-0"
+                  style={{ backgroundColor: stat.soft, border: `1px solid ${stat.color}40` }}
                 >
-                  <span className="text-2xl sm:text-3xl font-[var(--font-space-grotesk)] font-bold text-[var(--accent)] line-clamp-1">
-                    {stat.value}
+                  <span
+                    className="text-xl sm:text-3xl font-[var(--font-space-grotesk)] font-bold line-clamp-1"
+                    style={{ color: stat.color }}
+                  >
+                    <StatNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
                   </span>
-                  <span className="text-xs text-[var(--text-muted)] font-medium uppercase tracking-wider mt-1">
+                  <span className="text-[10px] sm:text-xs text-[var(--text-muted)] font-medium uppercase tracking-wider mt-1 text-center sm:text-left">
                     {stat.label}
                   </span>
                 </motion.div>
@@ -111,8 +155,14 @@ export default function Hero() {
               <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-soft)] via-transparent to-transparent rounded-[var(--radius-2xl)] blur-3xl opacity-50" />
               <div className="relative w-full h-full rounded-[var(--radius-2xl)] bg-[var(--bg-surface)] border border-[var(--border)] flex items-center justify-center overflow-hidden">
                 <div className="text-center p-8">
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-[var(--radius-xl)] bg-[var(--accent-soft)] flex items-center justify-center">
-                    <span className="text-[var(--accent)] font-[var(--font-space-grotesk)] font-bold text-5xl">E</span>
+                  <div className="w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                    <Image
+                      src="/logo.png"
+                      alt="E-Cell RBU logo"
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-contain"
+                    />
                   </div>
                   <h3 className="text-2xl font-[var(--font-space-grotesk)] font-bold text-[var(--text-primary)] mb-2">
                     E-Cell RBU
